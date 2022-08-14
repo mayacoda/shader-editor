@@ -1,6 +1,7 @@
 export interface ElectronAPI {
-  openFileDialog: () => Promise<File>
-  loadFile: (filePath: string) => Promise<string>
+  openFileDialog: () => Promise<string>
+  loadFile: (filePath: string) => Promise<Uint8Array>
+  loadFileFromDialog: () => Promise<Uint8Array>
 }
 
 declare global {

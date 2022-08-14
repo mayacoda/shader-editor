@@ -13,6 +13,9 @@ const api: ElectronAPI = {
       filePath: path.join(__dirname, filePath),
     })
   },
+  loadFileFromDialog: async () => {
+    return await ipcRenderer.invoke(EventType.LoadFileFromDialog)
+  },
 }
 
 contextBridge.exposeInMainWorld('electron', api)
