@@ -1,7 +1,14 @@
 import * as path from 'path'
 import { app, BrowserWindow, session, ipcMain } from 'electron'
-import { loadFile, openFile } from './file-system/file-utils'
+import {
+  loadFile,
+  loadFileFromDialog,
+  openFile,
+} from './file-system/file-utils'
 import { EventType } from './event-types'
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+} from 'electron-devtools-installer'
 
 const isDev = process.env.IS_DEV === 'true'
 
@@ -24,6 +31,9 @@ function createWindow() {
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../dist/index.html')}`
   )
+
+  mainWindow.maximize()
+
   // Open the DevTools.
   if (isDev) {
     mainWindow.webContents.openDevTools()
@@ -36,6 +46,10 @@ function createWindow() {
 
   ipcMain.handle(EventType.LoadFile, async (event, args) => {
     return await loadFile(args.filePath)
+  })
+
+  ipcMain.handle(EventType.LoadFileFromDialog, async () => {
+    return await loadFileFromDialog(mainWindow)
   })
 }
 
@@ -58,6 +72,10 @@ app.whenReady().then(() => {
       },
     })
   })
+
+  installExtension(REACT_DEVELOPER_TOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err))
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
