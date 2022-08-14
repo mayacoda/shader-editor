@@ -1,0 +1,63 @@
+{
+  "name": "threejs-shader-editor",
+  "description": "A desktop shader editor for Three.js",
+  "version": "0.0.1",
+  "main": "electron/main.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview",
+    "electron": "wait-on tcp:3000 && cross-env IS_DEV=true electron .",
+    "electron:pack": "electron-builder --dir",
+    "electron:dev": "concurrently -k \"cross-env BROWSER=none yarn dev --port=3000\" \"yarn electron:start\"",
+    "electron:start": "yarn tsc --project tsconfig.electron.json && wait-on tcp:3000 && cross-env IS_DEV=true electron ./dist/main.js",
+    "electron:builder": "electron-builder",
+    "build:for:electron": "vue-tsc --noEmit && cross-env ELECTRON=true vite build",
+    "app:build": "yarn build:for:electron && yarn electron:builder"
+  },
+  "dependencies": {
+    "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "@vitejs/plugin-vue": "^3.0.0",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "concurrently": "^7.3.0",
+    "cross-env": "^7.0.3",
+    "electron": "^19.0.10",
+    "electron-builder": "^23.3.3",
+    "eslint": "^8.21.0",
+    "eslint-plugin-vue": "^9.3.0",
+    "prettier": "2.7.1",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.0",
+    "vue-tsc": "^0.38.4",
+    "wait-on": "^6.0.1"
+  },
+  "build": {
+    "appId": "com.maya-ndljk.threejs-shader-editor",
+    "productName": "Three.js Shader Editor",
+    "copyright": "Copyright © 2022 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist_electron"
+    }
+  },
+  "author": {
+    "name": "Maya Nedeljković Batić",
+    "email": "maya.ndljk@gmail.com"
+  },
+  "license": "MIT"
+}
